@@ -1,11 +1,23 @@
 <script setup>
 import { Lock, User } from '@element-plus/icons-vue'
+import { ElMessage } from 'element-plus'
+import { userRegisterService } from '@/api/user.js'
 import { ref } from 'vue'
 const formModel = ref({
   username: '',
   password: '',
   repassword: ''
 })
+const form = ref()
+const register = async () => {
+  const valid = await form.value.validate()
+  if (valid) {
+    const res = await userRegisterService(formModel.value)
+    console.log(res)
+    ElMessage.success('注册成功')
+  }
+}
+
 const checkpassword = (rule, value, callback) => {
   if (formModel.value.password !== value) {
     callback(new Error('两次输入不一致'))
@@ -59,6 +71,7 @@ const isLoginFlag = ref(true)
       <!-- 登录组件 -->
 
       <el-form
+        ref="form"
         size="large"
         v-if="isLoginFlag"
         :model="formModel"
@@ -102,7 +115,7 @@ const isLoginFlag = ref(true)
       </el-form>
 
       <!-- 注册组件 -->
-      <el-form size="large" v-else :model="formModel" :rules="rules">
+      <el-form ref="form" size="large" v-else :model="formModel" :rules="rules">
         <el-form-item>
           <h2>注册</h2>
         </el-form-item>
@@ -132,7 +145,9 @@ const isLoginFlag = ref(true)
           ></el-input>
         </el-form-item>
         <el-form-item>
-          <el-button type="primary" style="width: 100%">注册</el-button>
+          <el-button type="primary" style="width: 100%" @click="register"
+            >注册</el-button
+          >
         </el-form-item>
         <el-form-item>
           <el-link type="info" underline="never" @click="isLoginFlag = true"

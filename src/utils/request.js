@@ -1,8 +1,8 @@
 import axios from 'axios'
-import { useUserStore } from '@/stores/user'
+// import { useUserStore } from '@/stores/user'
 import { ElMessage } from 'element-plus'
 import router from '@/router'
-const baseURL = 'http://big-event-vue-api-t.itheima.net'
+const baseURL = 'https://big-event-vue-api-t.itheima.net'
 
 const instance = axios.create({
   baseURL,
@@ -15,9 +15,9 @@ instance.interceptors.request.use(
   function (config) {
     // 携带TOKEN
     // 这里拿到的user是被pinia用reactive包装过的 所以下面调用的时候不需要.value
-    const user = useUserStore()
+    // const user = useUserStore()
     // config是本次请求的配置对象
-    if (user.token) config.headers.Authorization = user.token
+    // if (user.token) config.headers.Authorization = user.token
     return config
   },
   function (error) {

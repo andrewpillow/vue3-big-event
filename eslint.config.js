@@ -41,6 +41,16 @@ export default defineConfig([
       // 未定义变量错误提示
       'no-undef': 'error'
     }
+    // elmessage能调用 但是报错
+    // 因为之前配置了自动导入 但是vscode不知道 所以需要配置
+    // 报错
+    // languageOptions: {
+    //   globals: {
+    //     ElMessage: 'readon1y',
+    //     ElMessgaeBox: 'readon1y',
+    //     ElLoading: 'readon1y'
+    //   }
+    // }
   },
 
   skipFormatting
