@@ -1,6 +1,6 @@
 <script setup>
 import { Lock, User } from '@element-plus/icons-vue'
-import { ElMessage } from 'element-plus'
+// import { ElMessage } from 'element-plus'
 import { userRegisterService } from '@/api/user.js'
 import { ref } from 'vue'
 const formModel = ref({

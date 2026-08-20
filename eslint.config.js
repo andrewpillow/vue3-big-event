@@ -13,10 +13,17 @@ export default defineConfig([
 
   globalIgnores(['**/dist/**', '**/dist-ssr/**', '**/coverage/**']),
 
+  // elmessage能调用 但是报错
+  // elment-plus的自动导入 是在编译和运行的时候引入的 eslint是静态的检查工具 察觉不到这些动态注入的变量
+  // 这里手动将 ElMessage 声明为全局变量 就不需要在单独import
   {
     languageOptions: {
       globals: {
-        ...globals.browser
+        ...globals.browser,
+        ...globals.node,
+        ElMessage: 'readonly',
+        ElMessageBox: 'readonly',
+        ElNotification: 'readonly'
       }
     }
   },
@@ -41,16 +48,6 @@ export default defineConfig([
       // 未定义变量错误提示
       'no-undef': 'error'
     }
-    // elmessage能调用 但是报错
-    // 因为之前配置了自动导入 但是vscode不知道 所以需要配置
-    // 报错
-    // languageOptions: {
-    //   globals: {
-    //     ElMessage: 'readon1y',
-    //     ElMessgaeBox: 'readon1y',
-    //     ElLoading: 'readon1y'
-    //   }
-    // }
   },
 
   skipFormatting
