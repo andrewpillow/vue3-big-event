@@ -1,23 +1,41 @@
 <script setup>
 import { Lock, User } from '@element-plus/icons-vue'
-// import { ElMessage } from 'element-plus'
-import { userRegisterService } from '@/api/user.js'
+import { userRegisterService, userLoginService } from '@/api/user.js'
+import { useUserStore } from '@/stores/user'
+import router from '@/router/index'
 import { ref } from 'vue'
+import { watch } from 'vue'
 const formModel = ref({
   username: '',
   password: '',
   repassword: ''
 })
+
+// 绑定form的ref对象
+// 点击注册 开始预校验 校验通过后发送注册请求
 const form = ref()
 const register = async () => {
-  const valid = await form.value.validate()
-  if (valid) {
-    const res = await userRegisterService(formModel.value)
-    console.log(res)
+  await form.value.validate()
+  const res = await userRegisterService(formModel.value)
+  if (res.code === 0) {
     ElMessage.success('注册成功')
   }
 }
 
+//点击登录 开始预校验 校验通过发送请求 若返回登录成功信息 将token存入pinia 并完成本地持久化操作 完成后跳转到首页
+const userStore = useUserStore()
+const login = async () => {
+  await form.value.validate()
+  const res = await userLoginService(formModel.value)
+  console.log(res)
+  if (res.code === 0) {
+    userStore.setToken(res.token)
+    ElMessage.success('登录成功')
+    router.push('/')
+  }
+}
+
+// 自定义 repassword校验
 const checkpassword = (rule, value, callback) => {
   if (formModel.value.password !== value) {
     callback(new Error('两次输入不一致'))
@@ -25,6 +43,8 @@ const checkpassword = (rule, value, callback) => {
     callback()
   }
 }
+
+// rules 校验规则配置
 const rules = {
   username: [
     { required: true, message: '请输入用户名', trigger: 'change' },
@@ -50,7 +70,18 @@ const rules = {
     }
   ]
 }
+
+// 登录注册切换旗帜
 const isLoginFlag = ref(true)
+
+// 登录/注册切换重置表单数据
+watch(isLoginFlag, () => {
+  formModel.value = {
+    username: '',
+    password: '',
+    repassword: ''
+  }
+})
 </script>
 
 <template>
@@ -65,7 +96,10 @@ const isLoginFlag = ref(true)
 -->
 
   <el-row class="login-page">
+    <!-- 左侧背景图片 -->
+
     <el-col :span="12" class="bg"></el-col>
+    <!-- 登录注册界面 -->
 
     <el-col :span="6" :offset="3" class="form">
       <!-- 登录组件 -->
@@ -105,7 +139,9 @@ const isLoginFlag = ref(true)
           </div>
         </el-form-item>
         <el-form-item>
-          <el-button type="primary" style="width: 100%">登录</el-button>
+          <el-button type="primary" style="width: 100%" @click="login"
+            >登录</el-button
+          >
         </el-form-item>
         <el-form-item>
           <el-link type="info" underline="never" @click="isLoginFlag = false"
@@ -163,13 +199,15 @@ const isLoginFlag = ref(true)
 .login-page {
   /* 确保页面占满浏览器整屏高度 */
   height: 100vh;
-  // width: 100vw;
-  display: flex;
-  align-items: center;
   .bg {
     background: url('@/assets/BackPicForLogin.jpeg') no-repeat center center;
     background-size: cover; //等比缩放覆盖整个el-col区域
-    height: 100%;
+  }
+
+  .form {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
   }
 }
 </style>
