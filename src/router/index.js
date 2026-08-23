@@ -1,4 +1,5 @@
 import { createRouter, createWebHistory } from 'vue-router'
+import { useUserStore } from '@/stores/user'
 
 const router = createRouter({
   // history模式：createWebHistory  （地址栏不带#）
@@ -6,6 +7,7 @@ const router = createRouter({
 
   history: createWebHistory(import.meta.env.BASE_URL),
   routes: [
+    // 以下component的写法 为路由懒加载 可以提升首屏加载的速度
     { path: '/login', component: () => import('@/views/login/LoginPage.vue') },
     {
       path: '/',
@@ -35,6 +37,15 @@ const router = createRouter({
       ]
     }
   ]
+})
+
+// 登录访问拦截
+// 访问非login界面若无token 则跳转至login界面
+router.beforeEach((to) => {
+  const userStore = useUserStore()
+  if (!userStore.token && to.path != '/login') {
+    return '/login'
+  }
 })
 
 export default router
