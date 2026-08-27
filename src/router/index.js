@@ -41,7 +41,7 @@ const router = createRouter({
 
 // 登录访问拦截
 // 访问非login界面若无token 则跳转至login界面
-router.beforeEach((to, from) => {
+router.beforeEach((to) => {
   const userStore = useUserStore()
   if (!userStore.token && to.path != '/login') {
     return '/login'
