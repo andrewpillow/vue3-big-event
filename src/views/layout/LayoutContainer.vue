@@ -11,10 +11,42 @@ import {
 } from '@element-plus/icons-vue'
 import { useUserStore } from '@/stores/user'
 import { onMounted } from 'vue'
+import router from '@/router'
 const userStore = useUserStore()
 onMounted(() => {
   userStore.getUserInfo()
 })
+
+const handleCommand = async (key) => {
+  if (key === 'logout') {
+    // 退出登录
+    // 弹出确认框
+    // 确定退出之后 清除pinia及本地存储的用户和token数据
+    // 然后跳转到login界面
+    await ElMessageBox.confirm('请确认是否退出当前登录?', '退出登录确认', {
+      confirmButtonText: '确定',
+      cancelButtonText: '取消',
+      type: 'warning'
+    })
+      .then(() => {
+        ElMessage({
+          type: 'success',
+          message: '操作成功'
+        })
+        userStore.removeToken()
+        router.push('/login')
+      })
+      .catch(() => {
+        ElMessage({
+          type: 'info',
+          message: '已取消操作'
+        })
+      })
+  } else {
+    // 跳转导航
+    router.push(`/user/${key}`)
+  }
+}
 </script>
 
 <template>
@@ -71,15 +103,16 @@ onMounted(() => {
               <CaretBottom />
             </el-icon>
           </span>
+
           <template #dropdown>
             <el-dropdown-menu>
-              <el-dropdown-item command="info" :icon="User"
+              <el-dropdown-item command="profile" :icon="User"
                 >基本资料</el-dropdown-item
               >
               <el-dropdown-item command="avatar" :icon="Crop"
                 >更换头像</el-dropdown-item
               >
-              <el-dropdown-item command="resetPassword" :icon="EditPen"
+              <el-dropdown-item command="password" :icon="EditPen"
                 >重置密码</el-dropdown-item
               >
               <el-dropdown-item command="logout" :icon="SwitchButton"

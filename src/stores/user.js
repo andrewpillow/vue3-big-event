@@ -15,6 +15,7 @@ export const useUserStore = defineStore(
     // 清除token方法
     const removeToken = () => {
       token.value = ''
+      userInformation.value = {}
     }
 
     // userInfo对象
@@ -23,7 +24,7 @@ export const useUserStore = defineStore(
     const getUserInfo = async () => {
       const res = await userInfoService()
       userInformation.value = res.data
-      console.log(userInformation.value)
+      // console.log(userInformation.value)
     }
     return {
       token,
