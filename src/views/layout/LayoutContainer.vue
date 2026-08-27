@@ -9,6 +9,12 @@ import {
   CaretBottom,
   SwitchButton
 } from '@element-plus/icons-vue'
+import { useUserStore } from '@/stores/user'
+import { onMounted } from 'vue'
+const userStore = useUserStore()
+onMounted(() => {
+  userStore.getUserInfo()
+})
 </script>
 
 <template>
@@ -56,11 +62,11 @@ import {
     <el-container>
       <el-header>
         <div>
-          黑马程序员：<strong>{{ '用户名' }}</strong>
+          黑马程序员：<strong>{{ userStore.userInformation.username }}</strong>
         </div>
         <el-dropdown placement="bottom-end" @command="handleCommand">
           <span class="el-dropdown__box">
-            <el-avatar src="@/assets/BackPicForLogin.jpeg" />
+            <el-avatar :src="userStore.userInformation.user_pic" />
             <el-icon>
               <CaretBottom />
             </el-icon>

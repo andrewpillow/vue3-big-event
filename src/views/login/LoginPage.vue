@@ -27,7 +27,7 @@ const userStore = useUserStore()
 const login = async () => {
   await form.value.validate()
   const res = await userLoginService(formModel.value)
-  console.log(res)
+  // console.log(res)
   if (res.code === 0) {
     userStore.setToken(res.token)
     ElMessage.success('登录成功')

@@ -5,7 +5,7 @@ const baseURL = 'https://big-event-vue-api-t.itheima.net'
 
 const instance = axios.create({
   baseURL,
-  timeout: 1000 //超时时间 1s内未收到服务器响应 axios会自动中断请求 并抛出超时错误
+  timeout: 2000 //超时时间 1s内未收到服务器响应 axios会自动中断请求 并抛出超时错误
   // headers: { 'X-Custom-Header': 'foobar' }
 })
 
@@ -44,7 +44,7 @@ instance.interceptors.response.use(
     if (error.response?.status === 401) {
       router.push('/login')
     }
-
+    console.log(error)
     // 其他错误 提示
     ElMessage.error(error.response.data.message || '服务异常')
     return Promise.reject(error)
