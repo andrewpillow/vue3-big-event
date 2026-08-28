@@ -1,6 +1,7 @@
 <script setup>
 import { articleInfoService } from '@/api/article'
 import { ref } from 'vue'
+import DialogBox from './components/DialogBox.vue'
 
 // 获取文章列表信息
 const articleInfo = ref([])
@@ -13,11 +14,19 @@ const getArticleInfo = async () => {
   loading.value = false
 }
 getArticleInfo()
-// 编辑
-const handleEdit = ($index, row) => {
-  console.log($index, row)
+
+// 按钮功能
+const dialog = ref()
+
+// 添加分类
+const handleAdd = () => {
+  dialog.value.open({})
 }
-// 删除
+// 编辑分类
+const handleEdit = ($index, row) => {
+  dialog.value.open(row)
+}
+// 删除分类
 const handleDel = ($index, row) => {
   console.log($index, row)
 }
@@ -27,7 +36,7 @@ const handleDel = ($index, row) => {
   <page-container title="文章分类">
     <!-- 右侧按钮 -->
     <template #btn>
-      <el-button type="primary">添加分类</el-button>
+      <el-button type="primary" @click="handleAdd()">添加分类</el-button>
     </template>
 
     <!-- 主内容 -->
@@ -53,6 +62,7 @@ const handleDel = ($index, row) => {
       <el-empty v-else description="无数据" />
     </template>
   </page-container>
+  <DialogBox ref="dialog"></DialogBox>
 </template>
 
 <style scoped lang="scss"></style>
