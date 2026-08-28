@@ -1,5 +1,5 @@
 <script setup>
-import { articleInfoService } from '@/api/article'
+import { articleInfoService, articleDelService } from '@/api/article'
 import { ref } from 'vue'
 import DialogBox from './components/DialogBox.vue'
 
@@ -23,12 +23,19 @@ const handleAdd = () => {
   dialog.value.open({})
 }
 // 编辑分类
-const handleEdit = ($index, row) => {
+const handleEdit = (row) => {
   dialog.value.open(row)
 }
 // 删除分类
-const handleDel = ($index, row) => {
-  console.log($index, row)
+const handleDel = async (row) => {
+  await ElMessageBox.confirm('确定删除？', '删除提示', {
+    confirmButtonText: '确定',
+    cancelButtonText: '取消',
+    type: 'warning'
+  })
+  await articleDelService(row.id)
+  ElMessage.success('删除成功')
+  getArticleInfo()
 }
 </script>
 
@@ -51,18 +58,16 @@ const handleDel = ($index, row) => {
         <el-table-column property="cate_name" label="分类名字" />
         <el-table-column property="cate_alias" label="分类别名" />
         <el-table-column label="操作" width="190">
-          <template #default="{ row, $index }">
-            <el-button @click="handleEdit($index, row)">编辑</el-button>
-            <el-button @click="handleDel($index, row)" type="danger"
-              >删除</el-button
-            >
+          <template #default="{ row }">
+            <el-button @click="handleEdit(row)">编辑</el-button>
+            <el-button @click="handleDel(row)" type="danger">删除</el-button>
           </template>
         </el-table-column>
       </el-table>
       <el-empty v-else description="无数据" />
     </template>
   </page-container>
-  <DialogBox ref="dialog"></DialogBox>
+  <DialogBox ref="dialog" @refresh="getArticleInfo"></DialogBox>
 </template>
 
 <style scoped lang="scss"></style>
