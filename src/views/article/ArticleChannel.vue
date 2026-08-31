@@ -4,13 +4,13 @@ import { ref } from 'vue'
 import DialogBox from './components/DialogBox.vue'
 
 // 获取文章列表信息
-const articleInfo = ref([])
+const cateInfo = ref([])
 const loading = ref(false)
 
 const getArticleInfo = async () => {
   loading.value = true
   const res = await articleInfoService()
-  articleInfo.value = res.data
+  cateInfo.value = res.data
   loading.value = false
 }
 getArticleInfo()
@@ -49,8 +49,8 @@ const handleDel = async (row) => {
     <!-- 主内容 -->
     <template #default>
       <el-table
-        v-if="articleInfo.length > 0"
-        :data="articleInfo"
+        v-if="cateInfo.length > 0"
+        :data="cateInfo"
         style="width: 100%"
         v-loading="loading"
       >

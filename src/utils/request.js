@@ -5,7 +5,8 @@ const baseURL = 'https://big-event-vue-api-t.itheima.net'
 
 const instance = axios.create({
   baseURL,
-  timeout: 1500 //超时时间 1s内未收到服务器响应 axios会自动中断请求 并抛出超时错误
+  timeout: 1000
+  //超时时间 1s内未收到服务器响应 axios会自动中断请求 并抛出超时错误
   // headers: { 'X-Custom-Header': 'foobar' }
 })
 
