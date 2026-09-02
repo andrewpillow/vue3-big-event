@@ -5,7 +5,12 @@ import { Plus } from '@element-plus/icons-vue'
 import ChannelSelect from '@/views/article/components/ChannelSelect.vue'
 import { QuillEditor } from '@vueup/vue-quill'
 import '@vueup/vue-quill/dist/vue-quill.snow.css'
-import { articlePubService, articleDetailService } from '@/api/article'
+import {
+  articlePubService,
+  articleDetailService,
+  articleEditService,
+  articleDeletService
+} from '@/api/article'
 import { ElMessage } from 'element-plus'
 import { baseURL } from '@/utils/request'
 
@@ -64,8 +69,9 @@ const defaultInfo = {
 const detailInfo = ref({ ...defaultInfo })
 
 // 转换为formdata格式
-const formData = new FormData()
 const convertToFormData = (value) => {
+  const formData = new FormData()
+
   for (let key in value) {
     formData.append(key, value[key])
   }
@@ -80,6 +86,7 @@ const openDrawer = async (row) => {
     title.value = '编辑文章'
     const res = await articleDetailService(row.id)
     detailInfo.value = res.data
+    detailInfo.value.id = row.id
     imageUrl.value = baseURL + res.data.cover_img
   } else {
     title.value = '发布文章'
@@ -114,18 +121,25 @@ const onSubmit = async (value) => {
   }
 
   if (title.value === '发布文章') {
-    await convertToFormData(detailInfo.value)
-    await articlePubService(formData)
+    const res = await convertToFormData(detailInfo.value)
+    await articlePubService(res)
     params.value.pagenum = Math.ceil((total.value + 1) / params.value.pagesize)
     ElMessage.success('发布成功')
   } else {
     await urlToFile(imageUrl.value, detailInfo.value.cover_img)
-    await convertToFormData(detailInfo.value)
-
+    const res = await convertToFormData(detailInfo.value)
+    await articleEditService(res)
     ElMessage.success('编辑已保存')
   }
   getInfo()
   drawer.value = false
+}
+
+//删除文章功能
+const handleDel = async (row) => {
+  await articleDeletService(row.id)
+  getInfo()
+  ElMessage.success('删除成功')
 }
 </script>
 
@@ -215,8 +229,7 @@ const onSubmit = async (value) => {
           auto-upload:false
           :show-file-list="false"
           :on-change="updatePic"
-          :on-success="handleAvatarSuccess"
-          :before-upload="beforeAvatarUpload"
+          :auto-upload="false"
         >
           <img v-if="imageUrl" :src="imageUrl" class="avatar" />
           <el-icon v-else class="avatar-uploader-icon"><Plus /></el-icon>

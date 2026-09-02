@@ -33,5 +33,9 @@ export const articleDetailService = (id) => {
 }
 //更新
 export const articleEditService = (data) => {
-  return request.putpost('/my/article/info', data)
+  return request.put('/my/article/info', data)
 }
+
+//删除
+export const articleDeletService = (id) =>
+  request.delete('/my/article/info', { params: { id } })
