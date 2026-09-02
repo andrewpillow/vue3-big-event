@@ -8,7 +8,7 @@ defineProps({
 </script>
 
 <template>
-  <el-card>
+  <el-card style="height: 97%">
     <template #header>
       <div class="header">
         <span style="font-size: 19px">{{ title }}</span>

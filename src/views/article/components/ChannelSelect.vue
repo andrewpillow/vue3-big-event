@@ -12,7 +12,8 @@ const selectInfo = ref()
 defineProps({
   modelValue: {
     type: [Number, String]
-  }
+  },
+  width: String
 })
 const emit = defineEmits(['update:modelValue'])
 </script>
@@ -20,7 +21,7 @@ const emit = defineEmits(['update:modelValue'])
 <template>
   <el-form-item label="文章分类：">
     <el-select
-      style="width: 200px"
+      :style="{ width }"
       :modelValue="modelValue"
       @update:modelValue="emit('update:modelValue', $event)"
     >

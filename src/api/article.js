@@ -21,3 +21,17 @@ export const articleDelService = (id) => {
     params: { id }
   })
 }
+
+//发布文章
+export const articlePubService = (data) => {
+  return request.post('/my/article/add', data)
+}
+
+//获取文章详情
+export const articleDetailService = (id) => {
+  return request.get('/my/article/info', { params: { id } })
+}
+//更新
+export const articleEditService = (data) => {
+  return request.putpost('/my/article/info', data)
+}
