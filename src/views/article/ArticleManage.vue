@@ -226,7 +226,6 @@ const handleDel = async (row) => {
       <el-form-item label="文章封面：">
         <el-upload
           class="avatar-uploader"
-          auto-upload:false
           :show-file-list="false"
           :on-change="updatePic"
           :auto-upload="false"

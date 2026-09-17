@@ -53,8 +53,12 @@ const handleCommand = async (key) => {
   <el-container class="common-layout">
     <!-- 侧边栏 -->
     <el-aside width="200px">
+      <div style="display: flex; justify-content: center">
+        <img src="@/assets/logo2.png" style="width: 80%" />
+      </div>
       <el-menu
         active-text-color="#ffd04b"
+        style="border-right: none"
         background-color="#232323"
         :default-active="$route.path"
         text-color="#fff"
