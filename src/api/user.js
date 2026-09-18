@@ -25,3 +25,7 @@ export const userUpdateService = (data) => request.put('/my/userinfo', data)
 // 更新用户头像
 export const userUpdateAvatarService = (data) =>
   request.patch('/my/update/avatar', data)
+
+//更新用户密码
+export const userUpdatePasswordService = (data) =>
+  request.patch('/my/updatepwd', data)

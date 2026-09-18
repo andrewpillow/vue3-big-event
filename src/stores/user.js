@@ -26,12 +26,17 @@ export const useUserStore = defineStore(
       userInformation.value = res.data
       // console.log(userInformation.value)
     }
+    // 清除用户信息
+    const removeUserInfo = () => {
+      userInformation.value = {}
+    }
     return {
       token,
       setToken,
       removeToken,
       userInformation,
-      getUserInfo
+      getUserInfo,
+      removeUserInfo
     }
   },
   {
